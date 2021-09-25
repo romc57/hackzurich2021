@@ -11,7 +11,7 @@ def hello_world():
 
 @app.route('/get_genre_weights')
 def get_genre_weights():
-    return os.environ['FITROCKR_API_KEY']
+    return 'soon'
 
 
 if __name__ == '__main__':
