@@ -1,3 +1,5 @@
+import pickle
+
 import pandas as pd
 import json
 from ibm_watson import NaturalLanguageUnderstandingV1
@@ -15,9 +17,17 @@ df = pd.read_csv('articles_dataset_1k.csv')
 df.head()
 
 res = []
+result_to_save = {}
 for i, (index, row) in enumerate(df.iterrows()):
     response = natural_language_understanding.analyze(text=row['content'], features=Features(
-        keywords=KeywordsOptions(limit=5, sentiment=True, emotion=True)))
+        keywords=KeywordsOptions(limit=1, sentiment=True, emotion=True)))
     res.append(response)
     print(i)
+    for item in res:
+        tmp = item.result['keywords'][0]
+        result_to_save[row['title']] = tmp['emotion']
+
+file_to_store = open("emotions.pkl", "wb")
+pickle.dump(result_to_save, file_to_store)
+file_to_store.close()
 pass
