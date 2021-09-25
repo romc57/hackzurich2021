@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+import os
 
 app = Flask(__name__)
 
@@ -10,7 +11,7 @@ def hello_world():
 
 @app.route('/get_genre_weights')
 def get_genre_weights():
-    return
+    return os.environ['FITROCKR_API_KEY']
 
 
 if __name__ == '__main__':
