@@ -6,3 +6,4 @@ ibm_watson
 ibm_cloud_sdk_core
 ibm_watson
 flask_cors
+pytz

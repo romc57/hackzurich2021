@@ -18,7 +18,7 @@ def execute_fitrockr_api_call(end_point):
     '''
     url = 'https://api.fitrockr.com/{}'.format(end_point)
     headers = {'X-Tenant': 'hackzurich', 'Content-Type': 'application/json',
-               'X-API-Key': os.environ['FITROCKR_API_KEY']}
+               'X-API-Key': '500e9957-a125-40be-9925-50f29d9ae7d9'}
     response = requests.get(url, headers=headers)
     if response.status_code != 200:
         return
@@ -56,7 +56,10 @@ def find_matching_record(user_stats, time_in_sec):
         start_time = record['startTime']['time']
         start_time = time_to_sec(start_time['hour'], start_time['minute'], start_time['second'])
         if start_time <= time_in_sec < start_time + 180:
-            return record['stressLevelValue']
+            if int(record['stressLevelValue']) > 0:
+                return record['stressLevelValue']
+            else:
+                return 30
     return
 
 

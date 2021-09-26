@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect
 from modules import fitrockr_api, utils, genre_scaler
 from datetime import datetime
 from flask_cors import CORS
+from pytz import timezone
 
 app = Flask(__name__)
 CORS(app)
@@ -17,21 +18,20 @@ def hello_world():
 def get_genre_weights():
     if request.method == 'GET':
         global USER_ID
-        json_obj = utils.load_json_file('data/w.json')
-        cur_time = str(datetime.now()).split(' ')[1].split(':')
-        cur_time = fitrockr_api.time_to_sec(cur_time[0], cur_time[1], cur_time[2])
+        json_obj = utils.load_json_file('data/weights.json')
+        cur_time = utils.time_to_sec(str(datetime.now(timezone('Europe/Zurich'))).split(' ')[1])
         stress_level = fitrockr_api.get_user_stress_level(USER_ID, cur_time)
         if stress_level and stress_level > 0:
             weight_bin = genre_scaler.get_state(stress_level, json_obj['stress_bins'])
         else:
             weight_bin = '1'
-        return {'sentiment': json_obj['stress_weights'][str(weight_bin)]}
+        return {'sentiment': genre_scaler.get_weights(json_obj['stress_weights'][str(weight_bin)])}
 
 
 @app.route('/getStressStatistics', methods=["GET"])
 def get_stress_statistics():
     global USER_ID
-    cur_date = str(datetime.now()).split(' ')[0]
+    cur_date = str(datetime.now(timezone('Europe/Zurich'))).split(' ')[0]
     stress_records = fitrockr_api.get_user_stress_records(USER_ID, cur_date, cur_date)
     time_stamps = list()
     stress_sum = 0
@@ -48,15 +48,32 @@ def get_stress_statistics():
     return {'timeStamps': time_stamps, 'averageStress': stress_sum/record_count}
 
 
-@app.route('/addLike/<sentiment_id>', methods=['POST'])
-def like(sentiment_id):
-    print(sentiment_id)
+@app.route('/addLike/<article_id>', methods=['POST'])
+def like(article_id):
+    print(article_id)
     return redirect(request.referrer)
 
 
-@app.route('/justRead/<sentiment_id>')
-def read(sentiment_id):
-    print(sentiment_id)
+@app.route('/wasClicked/<sentiment_id>', methods=['POST'])
+def link_was_clicked(sentiment_id):
+    utils.add_to_link_entries([str(datetime.now(timezone('Europe/Zurich'))), sentiment_id])
+    return redirect(request.referrer)
+
+
+@app.route('/justRead', methods=['POST'])
+def read():
+    global USER_ID
+    prev_click = utils.csv_row_to_list(utils.get_last_link_entry())
+    date = prev_click[0].split(' ')[0]
+    time_in_sec = utils.time_to_sec(prev_click[0].split(' ')[1])
+    prev_stress = fitrockr_api.get_user_stress_level(USER_ID, time_in_sec, date)
+    time_in_sec = utils.time_to_sec(str(datetime.now(timezone('Europe/Zurich'))).split(' ')[1])
+    cur_stress = fitrockr_api.get_user_stress_level(USER_ID, time_in_sec)
+    w_json = utils.load_json_file('data/weights.json')
+    scores = genre_scaler.update_score(prev_stress, cur_stress, prev_click[1], w_json['stress_bins'], w_json['stress_weights'])
+    w_state = genre_scaler.get_state(prev_click[1], w_json['stress_bins'])
+    w_json['stress_weights'][str(w_state)] = scores
+    utils.write_json_file('data/weights.json', w_json)
     return redirect(request.referrer)
 
 
