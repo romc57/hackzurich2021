@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect
-from modules import fitrockr_api, utils, genre_scaler
+from modules import fitrockr_api, utils, genre_scaler, like_update
 from datetime import datetime
 from flask_cors import CORS
 from pytz import timezone
@@ -50,7 +50,8 @@ def get_stress_statistics():
 
 @app.route('/addLike/<article_id>', methods=['POST'])
 def like(article_id):
-    print(article_id)
+    last_link = utils.csv_row_to_list(utils.get_last_link_entry())[1]
+    like_update.update_graph_by_like(int(article_id), str(last_link))
     return redirect(request.referrer)
 
 
@@ -58,6 +59,11 @@ def like(article_id):
 def link_was_clicked(sentiment_id):
     utils.add_to_link_entries([str(datetime.now(timezone('Europe/Zurich'))), sentiment_id])
     return redirect(request.referrer)
+
+
+@app.route('/getArticleGraph/<id>', methods=['GET'])
+def get_article_gragh(id):
+    return utils.load_json_file('data/articles_data_reduced.txt')[id]
 
 
 @app.route('/justRead', methods=['POST'])
