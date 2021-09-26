@@ -18,7 +18,7 @@ def execute_fitrockr_api_call(end_point):
     '''
     url = 'https://api.fitrockr.com/{}'.format(end_point)
     headers = {'X-Tenant': 'hackzurich', 'Content-Type': 'application/json',
-               'X-API-Key': '500e9957-a125-40be-9925-50f29d9ae7d9'}
+               'X-API-Key': os.environ('FITROCKR_API_KEY')}
     response = requests.get(url, headers=headers)
     if response.status_code != 200:
         return
