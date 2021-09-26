@@ -1,14 +1,16 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, redirect
 from modules import fitrockr_api, utils, genre_scaler
 from datetime import datetime
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 USER_ID = fitrockr_api.get_user_info('new user RC')[0]['id']
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return render_template('index.html')
 
 
 @app.route('/getGenreWeights', methods=["GET"])
@@ -44,6 +46,18 @@ def get_stress_statistics():
         record_count += 1
         stress_sum += stress
     return {'timeStamps': time_stamps, 'averageStress': stress_sum/record_count}
+
+
+@app.route('/addLike/<sentiment_id>', methods=['POST'])
+def like(sentiment_id):
+    print(sentiment_id)
+    return redirect(request.referrer)
+
+
+@app.route('/justRead/<sentiment_id>')
+def read(sentiment_id):
+    print(sentiment_id)
+    return redirect(request.referrer)
 
 
 if __name__ == '__main__':
