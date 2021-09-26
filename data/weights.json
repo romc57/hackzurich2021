@@ -1,0 +1,172 @@
+{
+  "id": "supder_duper_nice_user",
+  "stress_bins": {
+    "0": [
+      0,
+      5
+    ],
+    "1": [
+      5,
+      8
+    ],
+    "2": [
+      8,
+      11
+    ],
+    "3": [
+      11,
+      14
+    ],
+    "4": [
+      14,
+      16
+    ],
+    "5": [
+      16,
+      19
+    ],
+    "6": [
+      19,
+      21
+    ],
+    "7": [
+      21,
+      23
+    ],
+    "8": [
+      23,
+      25
+    ],
+    "9": [
+      25,
+      28
+    ],
+    "10": [
+      28,
+      34
+    ],
+    "11": [
+      34,
+      40
+    ],
+    "12": [
+      40,
+      49
+    ],
+    "13": [
+      49,
+      64
+    ],
+    "14": [
+      64,
+      100
+    ]
+  },
+  "stress_weights": {
+    "0": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "1": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "2": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "3": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "4": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "5": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "6": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "7": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "8": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "9": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "10": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "11": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "12": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "13": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    },
+    "14": {
+      "Sadness": 0,
+      "Joy": 0,
+      "Fear": 0,
+      "Disgust": 0,
+      "Anger": 0
+    }
+  }
+}

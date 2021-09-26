@@ -7,7 +7,7 @@ def time_to_sec(hour, minute, sec):
     '''
     Convert time to seconds for comparison
     '''
-    return int(hour)*3600 + int(minute)*60 + int(sec)
+    return int(hour)*3600 + int(minute)*60 + int(float(sec))
 
 
 def execute_fitrockr_api_call(end_point):
@@ -21,7 +21,7 @@ def execute_fitrockr_api_call(end_point):
                'X-API-Key': os.environ['FITROCKR_API_KEY']}
     response = requests.get(url, headers=headers)
     if response.status_code != 200:
-        return False
+        return
     return response.json()
 
 
@@ -47,8 +47,17 @@ def get_user_info(query):
     end_point = 'v1/users?query={}&page=0&size=10'.format(query)
     response = execute_fitrockr_api_call(end_point)
     if not response or len(response) == 0:
-        return False
+        return
     return response
+
+
+def find_matching_record(user_stats, time_in_sec):
+    for record in user_stats:
+        start_time = record['startTime']['time']
+        start_time = time_to_sec(start_time['hour'], start_time['minute'], start_time['second'])
+        if start_time <= time_in_sec < start_time + 180:
+            return record['stressLevelValue']
+    return
 
 
 def get_user_stress_level(user_id, time_in_sec, date=str(datetime.now()).split(' ')[0]):
@@ -62,9 +71,10 @@ def get_user_stress_level(user_id, time_in_sec, date=str(datetime.now()).split('
     user_stats = get_user_stress_records(user_id, date, date)
     if not user_stats:
         return None
-    for record in user_stats:
-        start_time = record['startTime']['time']
-        start_time = time_to_sec(start_time['hour'], start_time['minute'], start_time['second'])
-        if start_time <= time_in_sec < start_time + 180:
-            return record['stressLevelValue']
-    return None
+    stress_record = find_matching_record(user_stats, time_in_sec)
+    if not stress_record:
+        time_in_sec -= 300  # -5 minutes
+        stress_record = find_matching_record(user_stats, time_in_sec)
+        return stress_record
+    return stress_record
+
